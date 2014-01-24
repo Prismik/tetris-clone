@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-<<<<<<< HEAD
-=======
-using System.Linq;
-using System.Text;
->>>>>>> origin/master
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -20,24 +15,14 @@ namespace Tetris
     class Board
     {
         public Block[,] Grid { get; set; }
-<<<<<<< HEAD
-
         TetrominoBuffer _buffer = new TetrominoBuffer();
         InputState _input = new InputState();
         Score _score;
         Level _level;
-=======
-        TetrominoBuffer _buffer;
->>>>>>> origin/master
         Tetromino _tetromino;
         GhostPiece _ghost;
         Holder _holder;
         Preview _preview;
-        Random _rand;
-<<<<<<< HEAD
-=======
-        InputState _input;
->>>>>>> origin/master
         SpriteBatch _spriteBatch;
         SpriteFont _font;
         Texture2D _texture;
@@ -52,21 +37,12 @@ namespace Tetris
         public Board(SpriteBatch sb, SpriteFont font, Texture2D text)
         {
             _texture = text;
-<<<<<<< HEAD
             _font = font;
             _holder = new Holder(_font);
             _score = new Score(_font);
             _level = new Level(_font);
             _preview = new Preview(_font, _buffer);
             _spriteBatch = sb;
-=======
-            _buffer = new TetrominoBuffer();
-            _font = font;
-            _holder = new Holder(_font);
-            _preview = new Preview(_font, _buffer);
-            _spriteBatch = sb;
-            _input = new InputState();
->>>>>>> origin/master
             Grid = new Block[22, 10];
             NewTetromino();
         }
@@ -172,12 +148,8 @@ namespace Tetris
         {
             NewTetromino(); // Adds a new tetromino
             _holder.Active = true; // Holder function are activated
-<<<<<<< HEAD
             int nbLines = ClearLines();
             _score.HandleScoreEvent(nbLines, _level.CurrentLevel);
-=======
-            ClearLines();
->>>>>>> origin/master
             return true;
         }
 
@@ -272,7 +244,6 @@ namespace Tetris
         /// <summary>
         /// Clear all line that needs to be cleared.
         /// </summary>
-<<<<<<< HEAD
         public int ClearLines()
         {
             Queue<int> linesToClear = new Queue<int>();
@@ -285,17 +256,6 @@ namespace Tetris
                 ClearLine(linesToClear.Dequeue());
 
             return nbLines;
-=======
-        public void ClearLines()
-        {
-            Stack<int> linesToClear = new Stack<int>();
-            for (int i = 0; i != Grid.GetLength(0); i++)
-                if (!FoundEmpty(i))
-                    linesToClear.Push(i);
-
-            while (linesToClear.Count != 0)
-                ClearLine(linesToClear.Pop());
->>>>>>> origin/master
         }
 
         private bool FoundEmpty(int i)
@@ -399,11 +359,7 @@ namespace Tetris
             PrintBoard();
             _holder.Draw(_spriteBatch, _texture);
             _preview.Draw(_spriteBatch, _texture);
-<<<<<<< HEAD
             _score.Draw(_spriteBatch);
-=======
-            // _ghost.Draw(_spriteBatch, _texture);
->>>>>>> origin/master
             _spriteBatch.End();
         }
     }
