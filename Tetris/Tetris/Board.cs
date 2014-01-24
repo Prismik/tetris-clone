@@ -14,6 +14,7 @@ namespace Tetris
     /// </summary>
     class Board
     {
+        int totalLines;
         public Block[,] Grid { get; set; }
         TetrominoBuffer _buffer = new TetrominoBuffer();
         InputState _input = new InputState();
@@ -149,7 +150,13 @@ namespace Tetris
             NewTetromino(); // Adds a new tetromino
             _holder.Active = true; // Holder function are activated
             int nbLines = ClearLines();
+            totalLines += nbLines;
             _score.HandleScoreEvent(nbLines, _level.CurrentLevel);
+            if (totalLines > 10)
+            {
+                totalLines %= 10;
+                _level.LevelUp();
+            }
             return true;
         }
 
@@ -323,25 +330,51 @@ namespace Tetris
             _spriteBatch.Draw(_texture, rect, null, c);
         }
 
+        int DASTimer = -1;
+        bool DASEnabled = false;
+        private void StartDASTimer()
+        {
+            DASTimer = 0;
+        }
+
+        private void StopDASTimer()
+        {
+            DASTimer = -1;
+        }
+
         public void Update(GameTime gameTime)
         {
             _timer += gameTime.ElapsedGameTime.Milliseconds;
-            if (_timer >= 1000)
+            if (_timer >= _level.CurrentDelay)
             {
                 MoveTetromino(Directions.Bottom);
                 _timer = 0;
             }
 
+            if (DASTimer != -1)
+            {
+                DASTimer += gameTime.ElapsedGameTime.Milliseconds;
+            }
+
             _input.Update();
             PlayerIndex useless;
             if (_input.IsNewKeyPress(Keys.D, null, out useless))
+            {
                 MoveTetromino(Directions.Right);
-
+                StartDASTimer();
+            }
+       
             if (_input.IsNewKeyPress(Keys.S, null, out useless))
+            {
                 MoveTetromino(Directions.Bottom);
+                StartDASTimer();
+            }
 
             if (_input.IsNewKeyPress(Keys.A, null, out useless))
+            {
                 MoveTetromino(Directions.Left);
+                StartDASTimer();
+            }
 
             if (_input.IsNewKeyPress(Keys.Space, null, out useless))
                 RotateTetromino();
@@ -360,6 +393,7 @@ namespace Tetris
             _holder.Draw(_spriteBatch, _texture);
             _preview.Draw(_spriteBatch, _texture);
             _score.Draw(_spriteBatch);
+            _level.Draw(_spriteBatch);
             _spriteBatch.End();
         }
     }
