@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris", "Tetris\Tetris\Tetris.csproj", "{2F39F06B-6963-422B-9ADF-D44598A8ABF8}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "TetrisContent", "Tetris\TetrisContent\TetrisContent.contentproj", "{6465C912-0F23-44AB-A7C2-E21ABD3415A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F39F06B-6963-422B-9ADF-D44598A8ABF8}.Debug|x86.ActiveCfg = Debug|x86
+		{2F39F06B-6963-422B-9ADF-D44598A8ABF8}.Debug|x86.Build.0 = Debug|x86
+		{2F39F06B-6963-422B-9ADF-D44598A8ABF8}.Release|x86.ActiveCfg = Release|x86
+		{2F39F06B-6963-422B-9ADF-D44598A8ABF8}.Release|x86.Build.0 = Release|x86
+		{6465C912-0F23-44AB-A7C2-E21ABD3415A4}.Debug|x86.ActiveCfg = Debug|x86
+		{6465C912-0F23-44AB-A7C2-E21ABD3415A4}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
