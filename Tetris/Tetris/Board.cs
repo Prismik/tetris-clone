@@ -16,6 +16,7 @@ namespace Tetris
     {
         int totalLines;
         public Block[,] Grid { get; set; }
+        DelayedAutoShift _das = new DelayedAutoShift();
         TetrominoBuffer _buffer = new TetrominoBuffer();
         InputState _input = new InputState();
         Score _score;
@@ -330,18 +331,6 @@ namespace Tetris
             _spriteBatch.Draw(_texture, rect, null, c);
         }
 
-        int DASTimer = -1;
-        bool DASEnabled = false;
-        private void StartDASTimer()
-        {
-            DASTimer = 0;
-        }
-
-        private void StopDASTimer()
-        {
-            DASTimer = -1;
-        }
-
         public void Update(GameTime gameTime)
         {
             _timer += gameTime.ElapsedGameTime.Milliseconds;
@@ -351,29 +340,34 @@ namespace Tetris
                 _timer = 0;
             }
 
-            if (DASTimer != -1)
-            {
-                DASTimer += gameTime.ElapsedGameTime.Milliseconds;
-            }
+            if (!_das.TimerStopped)
+                _das.IncrementTimer(gameTime.ElapsedGameTime.Milliseconds);
 
-            _input.Update();
+            _input.Update(); // Update input
             PlayerIndex useless;
+
+            if (_input.IsKeyUp(_das.key))
+                _das.StopDASTimer();
+
+            if (_das.DASEnabled)
+                _das.IncrementDelayTimer(gameTime.ElapsedGameTime.Milliseconds, MoveTetromino);
+
             if (_input.IsNewKeyPress(Keys.D, null, out useless))
             {
                 MoveTetromino(Directions.Right);
-                StartDASTimer();
+                _das.StartDASTimer(Directions.Right, Keys.D);
             }
        
             if (_input.IsNewKeyPress(Keys.S, null, out useless))
             {
                 MoveTetromino(Directions.Bottom);
-                StartDASTimer();
+                _das.StartDASTimer(Directions.Bottom, Keys.S);
             }
 
             if (_input.IsNewKeyPress(Keys.A, null, out useless))
             {
                 MoveTetromino(Directions.Left);
-                StartDASTimer();
+                _das.StartDASTimer(Directions.Left, Keys.A);
             }
 
             if (_input.IsNewKeyPress(Keys.Space, null, out useless))

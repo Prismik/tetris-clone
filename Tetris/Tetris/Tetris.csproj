@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board.cs" />
+    <Compile Include="DelayedAutoShift.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Score.cs" />
     <Compile Include="Util\Directions.cs" />
