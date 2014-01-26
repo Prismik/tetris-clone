@@ -55,7 +55,7 @@ namespace Tetris.Entities
         /// <param name="y"></param>
         public void Draw(SpriteBatch sb, Texture2D texture, int x, int y)
         {
-            Rectangle rect = new Rectangle(x, y, 12, 12);
+            Rectangle rect = new Rectangle(x, y, 16, 16);
             sb.Draw(texture, rect, null, Color);
         }
     }

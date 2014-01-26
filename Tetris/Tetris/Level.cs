@@ -39,7 +39,7 @@ namespace Tetris
         public void Draw(SpriteBatch sb)
         {
             sb.DrawString(_font, string.Format("Level: {0}", CurrentLevel.ToString()), 
-                new Vector2(50, 350), Color.Black,0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
+                new Vector2(50, 350), Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
         }
     }
 }

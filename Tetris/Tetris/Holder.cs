@@ -37,7 +37,7 @@ namespace Tetris
 
         public void Draw(SpriteBatch sb, Texture2D texture)
         {
-            sb.DrawString(_font, "Holder", new Vector2(255, 0), Color.Black);
+            sb.DrawString(_font, "Holder", new Vector2(255, 0), Color.White);
             if (Held != null)
             {
                 Held.Normalize().Draw(sb, texture, 255, 50);

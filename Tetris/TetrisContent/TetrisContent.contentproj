@@ -56,6 +56,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="complete.wav">
+      <Name>complete</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="button1.wav">
+      <Name>button1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="ghost.png">
+      <Name>ghost</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="info.txt">
       <Name>info</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

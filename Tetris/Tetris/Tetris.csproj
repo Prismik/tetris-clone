@@ -111,11 +111,13 @@
     <Compile Include="DelayedAutoShift.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Score.cs" />
+    <Compile Include="Util\AudioManager.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Entities\Block.cs" />
     <Compile Include="Entities\GhostPiece.cs" />
     <Compile Include="Holder.cs" />
     <Compile Include="InputState.cs" />
+    <Compile Include="Util\IAudioManager.cs" />
     <Compile Include="Util\Permutation.cs" />
     <Compile Include="Preview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

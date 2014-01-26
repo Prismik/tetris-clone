@@ -17,12 +17,17 @@ namespace Tetris
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager _graphics;
+        AudioManager _audio; 
         SpriteBatch _spriteBatch;
         Board _board;
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            _graphics = new GraphicsDeviceManager(this);
+            _audio = new AudioManager(this);
+
+            Components.Add(_audio);
+            Services.AddService(typeof(IAudioManager), _audio);
         }
 
         /// <summary>
@@ -46,8 +51,10 @@ namespace Tetris
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             SpriteFont font = Content.Load<SpriteFont>("gamefont");
             Texture2D texture = Content.Load<Texture2D>("block");
-            _board = new Board(_spriteBatch, font, texture);
-            // TODO: use this.Content to load your game content here
+            Texture2D ghost = Content.Load<Texture2D>("ghost");
+            _board = new Board(_spriteBatch, font, texture, ghost, this);
+            _audio.LoadSound("complete");
+            _audio.LoadSound("button1");
         }
 
         /// <summary>
@@ -80,7 +87,7 @@ namespace Tetris
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             _board.Draw();
             base.Draw(gameTime);

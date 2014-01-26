@@ -42,17 +42,19 @@ namespace Tetris
         public void IncrementTimer(int milliseconds)
         {
             DASTimer += milliseconds;
-            if (DASTimer > 500)
+            if (DASTimer > 150)
                 DASEnabled = true;
         }
 
-        public void IncrementDelayTimer(int milliseconds, Func<Vector2, bool> action)
+        public void IncrementDelayTimer(int milliseconds, Func<Vector2, bool> action, Action scoreAction)
         {
             DASDelayTimer += milliseconds;
-            if (DASDelayTimer > DelayedAutoShift.DAS_DELAY)
+            if (DASDelayTimer > DAS_DELAY)
             {
                 DASDelayTimer = 0;
                 action(DASDirection);
+                if (Directions.Bottom == DASDirection)
+                    scoreAction();
             }
         }
     }

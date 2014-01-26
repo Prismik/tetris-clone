@@ -28,7 +28,9 @@ namespace Tetris
         SpriteBatch _spriteBatch;
         SpriteFont _font;
         Texture2D _texture;
+        Texture2D _ghostTexture;
         int _timer;
+        IAudioManager _audio;
 
         /// <summary>
         /// Initializes the board and it's component.
@@ -36,10 +38,11 @@ namespace Tetris
         /// <param name="sb"></param>
         /// <param name="font"></param>
         /// <param name="text"></param>
-        public Board(SpriteBatch sb, SpriteFont font, Texture2D text)
+        public Board(SpriteBatch sb, SpriteFont font, Texture2D text, Texture2D ghost, Game game)
         {
             _texture = text;
             _font = font;
+            _ghostTexture = ghost;
             _holder = new Holder(_font);
             _score = new Score(_font);
             _level = new Level(_font);
@@ -47,6 +50,7 @@ namespace Tetris
             _spriteBatch = sb;
             Grid = new Block[22, 10];
             NewTetromino();
+            _audio = (IAudioManager)game.Services.GetService(typeof(IAudioManager));
         }
 
         /// <summary>
@@ -86,6 +90,7 @@ namespace Tetris
         private void NewTetromino(TetrominoTypes t)
         {
             _tetromino = new Tetromino(t);
+            CreateGhostPiece();
         }
 
         /// <summary>
@@ -131,6 +136,7 @@ namespace Tetris
 
         private bool HardMoveTetromino()
         {
+            int movement = (int)(_ghost._tetromino.Blocks[0].Position.Y - _tetromino.Blocks[0].Position.Y);
             WipeTetromino(_tetromino); // Old position
             IEnumerator enum1 = _ghost._tetromino.Blocks.GetEnumerator();
             IEnumerator enum2 = _tetromino.Blocks.GetEnumerator();
@@ -139,7 +145,18 @@ namespace Tetris
             
             ReplaceTetromino(_tetromino); // New position
             LockTetromino();
+            _score.HandleHardDropEvent(movement);
             return true;
+        }
+
+        private bool EvaluateIfDead()
+        {
+            for (int i = 0; i != 2; i++)
+                for (int j = 0; j != Grid.GetLength(1); j++)
+                    if (_tetromino.PointInsideTetromino(new Vector2(j, i)))
+                        return true;
+
+            return false;
         }
 
         /// <summary>
@@ -148,11 +165,15 @@ namespace Tetris
         /// <returns></returns>
         private bool LockTetromino()
         {
+            _score.Dead = EvaluateIfDead();
+
+            int nbLines = ClearLines();
+
             NewTetromino(); // Adds a new tetromino
             _holder.Active = true; // Holder function are activated
-            int nbLines = ClearLines();
+
             totalLines += nbLines;
-            _score.HandleScoreEvent(nbLines, _level.CurrentLevel);
+            _score.HandleClearLinesEvent(nbLines, _level.CurrentLevel);
             if (totalLines > 10)
             {
                 totalLines %= 10;
@@ -190,6 +211,7 @@ namespace Tetris
             ReplaceTetromino(_tetromino); // New position
 
             CreateGhostPiece();
+            _audio.PlaySound("button1");
             return true;
         }
 
@@ -310,14 +332,15 @@ namespace Tetris
         /// </summary>
         private void PrintBoard()
         {
-            for (int i = 0; i != Grid.GetLength(0); i++)
+            // Begins at 2 so that the tetromino can't be seen upon spawning.
+            for (int i = 2; i != Grid.GetLength(0); i++)
                 for (int j = 0; j != Grid.GetLength(1); j++)
                 {
                     Block b = (Block)Grid.GetValue(i, j);
                     if (b != null)
                         b.Draw(_spriteBatch, _texture, 50 + j * 16, 16 * i);
                     else
-                        Draw("0", 50 + j * 16, 16 * i, Color.DarkGray);
+                        Draw("0", 50 + j * 16, 16 * i, Color.White);
 
                     foreach (Block block in _ghost._tetromino.Blocks)
                         if (block.Position.X == j && block.Position.Y == i)
@@ -327,10 +350,10 @@ namespace Tetris
 
         private void Draw(string s, int x, int y, Color c)
         {
-            Rectangle rect = new Rectangle(x, y, 12, 12);
-            _spriteBatch.Draw(_texture, rect, null, c);
+            Rectangle rect = new Rectangle(x, y, 16, 16);
+            _spriteBatch.Draw(_ghostTexture, rect, null, c);
         }
-
+      
         public void Update(GameTime gameTime)
         {
             _timer += gameTime.ElapsedGameTime.Milliseconds;
@@ -350,24 +373,24 @@ namespace Tetris
                 _das.StopDASTimer();
 
             if (_das.DASEnabled)
-                _das.IncrementDelayTimer(gameTime.ElapsedGameTime.Milliseconds, MoveTetromino);
+                _das.IncrementDelayTimer(gameTime.ElapsedGameTime.Milliseconds, MoveTetromino, _score.HandleSoftDropEvent);
 
-            if (_input.IsNewKeyPress(Keys.D, null, out useless))
+            if (_input.IsNewKeyPress(Keys.Right, null, out useless))
             {
                 MoveTetromino(Directions.Right);
-                _das.StartDASTimer(Directions.Right, Keys.D);
+                _das.StartDASTimer(Directions.Right, Keys.Right);
             }
        
-            if (_input.IsNewKeyPress(Keys.S, null, out useless))
+            if (_input.IsNewKeyPress(Keys.Down, null, out useless))
             {
                 MoveTetromino(Directions.Bottom);
-                _das.StartDASTimer(Directions.Bottom, Keys.S);
+                _das.StartDASTimer(Directions.Bottom, Keys.Down);
             }
 
-            if (_input.IsNewKeyPress(Keys.A, null, out useless))
+            if (_input.IsNewKeyPress(Keys.Left, null, out useless))
             {
                 MoveTetromino(Directions.Left);
-                _das.StartDASTimer(Directions.Left, Keys.A);
+                _das.StartDASTimer(Directions.Left, Keys.Left);
             }
 
             if (_input.IsNewKeyPress(Keys.Space, null, out useless))
@@ -382,13 +405,16 @@ namespace Tetris
 
         public void Draw()
         {
-            _spriteBatch.Begin();
-            PrintBoard();
-            _holder.Draw(_spriteBatch, _texture);
-            _preview.Draw(_spriteBatch, _texture);
-            _score.Draw(_spriteBatch);
-            _level.Draw(_spriteBatch);
-            _spriteBatch.End();
+            if (!_score.Dead)
+            {
+                _spriteBatch.Begin();
+                PrintBoard();
+                _holder.Draw(_spriteBatch, _texture);
+                _preview.Draw(_spriteBatch, _texture);
+                _score.Draw(_spriteBatch);
+                _level.Draw(_spriteBatch);
+                _spriteBatch.End();
+            }
         }
     }
 }
