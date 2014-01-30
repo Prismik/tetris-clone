@@ -111,6 +111,7 @@
     <Compile Include="DelayedAutoShift.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Score.cs" />
+    <Compile Include="States\LocalMultiplayer.cs" />
     <Compile Include="Util\AudioManager.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Entities\Block.cs" />
@@ -125,7 +126,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Entities\Tetromino.cs" />
     <Compile Include="States\GameState.cs" />
-    <Compile Include="States\InnerGameState.cs" />
+    <Compile Include="States\SinglePlayer.cs" />
     <Compile Include="States\MainMenuState.cs" />
     <Compile Include="States\SplashState.cs" />
     <Compile Include="States\StateManager.cs" />

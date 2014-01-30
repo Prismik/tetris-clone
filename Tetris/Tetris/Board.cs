@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -18,7 +17,7 @@ namespace Tetris
         public Block[,] Grid { get; set; }
         DelayedAutoShift _das = new DelayedAutoShift();
         TetrominoBuffer _buffer = new TetrominoBuffer();
-        InputState _input = new InputState();
+        InputState _input;
         Score _score;
         Level _level;
         Tetromino _tetromino;
@@ -38,8 +37,9 @@ namespace Tetris
         /// <param name="sb"></param>
         /// <param name="font"></param>
         /// <param name="text"></param>
-        public Board(SpriteBatch sb, SpriteFont font, Texture2D text, Texture2D ghost, Game game)
+        public Board(SpriteBatch sb, SpriteFont font, Texture2D text, Texture2D ghost, Game game, InputState input)
         {
+            _input = input;
             _texture = text;
             _font = font;
             _ghostTexture = ghost;
@@ -134,6 +134,10 @@ namespace Tetris
             return true; // Success
         }
 
+        /// <summary>
+        /// Moves the tetromino to the ghost piece location instantly.
+        /// </summary>
+        /// <returns>Returns true if the hard drop has succeeded.</returns>
         private bool HardMoveTetromino()
         {
             int movement = (int)(_ghost._tetromino.Blocks[0].Position.Y - _tetromino.Blocks[0].Position.Y);
@@ -149,6 +153,10 @@ namespace Tetris
             return true;
         }
 
+        /// <summary>
+        /// Evaluates if the player is dead.
+        /// </summary>
+        /// <returns>True if the player is dead.</returns>
         private bool EvaluateIfDead()
         {
             for (int i = 0; i != 2; i++)

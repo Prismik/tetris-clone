@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Tetris.States;
 
 namespace Tetris
 {
@@ -19,7 +20,7 @@ namespace Tetris
         GraphicsDeviceManager _graphics;
         AudioManager _audio; 
         SpriteBatch _spriteBatch;
-        Board _board;
+        GameState _state;
         public Game1()
         {
             Content.RootDirectory = "Content";
@@ -52,7 +53,7 @@ namespace Tetris
             SpriteFont font = Content.Load<SpriteFont>("gamefont");
             Texture2D texture = Content.Load<Texture2D>("block");
             Texture2D ghost = Content.Load<Texture2D>("ghost");
-            _board = new Board(_spriteBatch, font, texture, ghost, this);
+            _state = new SinglePlayer(_spriteBatch, font, texture, ghost, this);
             _audio.LoadSound("complete");
             _audio.LoadSound("button1");
         }
@@ -77,7 +78,7 @@ namespace Tetris
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            _board.Update(gameTime);
+            _state.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -89,7 +90,7 @@ namespace Tetris
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _board.Draw();
+            _state.Draw();
             base.Draw(gameTime);
         }
     }
