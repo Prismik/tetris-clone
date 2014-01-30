@@ -12,8 +12,10 @@ namespace Tetris
         public int CurrentLevel { get; private set; }
         public float CurrentDelay { get; private set; }
         SpriteFont _font;
-        public Level(SpriteFont font)
+        Vector2 _offset;
+        public Level(SpriteFont font, Vector2 location)
         {
+            _offset = location;
             CurrentLevel = 0;
             _font = font;
             LevelUp();
@@ -39,7 +41,7 @@ namespace Tetris
         public void Draw(SpriteBatch sb)
         {
             sb.DrawString(_font, string.Format("Level: {0}", CurrentLevel.ToString()), 
-                new Vector2(50, 350), Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
+                new Vector2(50, 350) + _offset, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
         }
     }
 }

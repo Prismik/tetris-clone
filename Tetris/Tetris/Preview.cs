@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Tetris.Entities.Tetromino;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Tetris
 {
@@ -15,8 +16,10 @@ namespace Tetris
         Queue<Tetromino> _previews;
         SpriteFont _font;
         TetrominoBuffer _buffer;
-        public Preview(SpriteFont font, TetrominoBuffer buffer)
+        Vector2 _offset;
+        public Preview(SpriteFont font, TetrominoBuffer buffer, Vector2 location)
         {
+            _offset = location;
             _font = font;
             _previews = new Queue<Tetromino>(3);
             _buffer = buffer;
@@ -38,7 +41,7 @@ namespace Tetris
             int i = 0;
             foreach (Tetromino t in _previews)
             {
-                t.Normalize().Draw(sb, texture, 255, 320 - i * 50);
+                t.Normalize().Draw(sb, texture, (int)_offset.X + 255, (int)_offset.Y + 320 - i * 50);
                 i++;
             }
         }

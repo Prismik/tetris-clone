@@ -14,8 +14,10 @@ namespace Tetris
         public Tetromino PreviousHeld { get; protected internal set; }
         public Tetromino Held { get; protected internal set; }
         private SpriteFont _font;
-        public Holder(SpriteFont font)
+        Vector2 _offset;
+        public Holder(SpriteFont font, Vector2 location)
         {
+            _offset = location;
             PreviousHeld = null;
             Held = null;
             Active = true;
@@ -37,13 +39,9 @@ namespace Tetris
 
         public void Draw(SpriteBatch sb, Texture2D texture)
         {
-            sb.DrawString(_font, "Holder", new Vector2(255, 0), Color.White);
+            sb.DrawString(_font, "Holder", new Vector2(255, 0) + _offset, Color.White);
             if (Held != null)
-            {
-                Held.Normalize().Draw(sb, texture, 255, 50);
-               // Rectangle rect = new Rectangle(255, 50, 12, 12);
-               // sb.Draw(texture, rect, null, Held.Blocks[0].Color);
-            }
+                Held.Normalize().Draw(sb, texture, (int)_offset.X + 255, (int)_offset.Y + 50);
         }
     }
 }

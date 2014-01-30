@@ -25,6 +25,8 @@ namespace Tetris
         {
             Content.RootDirectory = "Content";
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = 1024;
+            _graphics.PreferredBackBufferHeight = 564;
             _audio = new AudioManager(this);
 
             Components.Add(_audio);
@@ -53,7 +55,7 @@ namespace Tetris
             SpriteFont font = Content.Load<SpriteFont>("gamefont");
             Texture2D texture = Content.Load<Texture2D>("block");
             Texture2D ghost = Content.Load<Texture2D>("ghost");
-            _state = new SinglePlayer(_spriteBatch, font, texture, ghost, this);
+            _state = new LocalMultiplayer(_spriteBatch, font, texture, ghost, this);
             _audio.LoadSound("complete");
             _audio.LoadSound("button1");
         }

@@ -12,13 +12,15 @@ namespace Tetris.States
         Board _board;
         SpriteBatch _spriteBatch;
         public SinglePlayer(SpriteBatch spriteBatch, SpriteFont font, Texture2D texture, Texture2D ghost, Game game)
+            : base()
         {
             _spriteBatch = spriteBatch;
-            _board = new Board(spriteBatch, font, texture, ghost, game, State);
+            _board = new Board(spriteBatch, font, texture, ghost, game, InputState, new Vector2(50, 0), PlayerIndex.One);
         }
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
             _board.Update(gameTime);
         }
 

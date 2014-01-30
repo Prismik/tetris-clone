@@ -8,13 +8,16 @@ namespace Tetris.States
 {
     abstract class GameState
     {
-        public InputState State { get; private set; }
+        public InputState InputState { get; private set; }
         public GameState()
         {
-            State = new InputState();
+            InputState = new InputState();
         }
 
-        public abstract void Update(GameTime gameTime);
+        public virtual void Update(GameTime gameTime)
+        {
+            InputState.Update();
+        }
 
         public abstract void Draw();
     }

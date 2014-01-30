@@ -8,8 +8,10 @@ namespace Tetris
         public int CurrentScore { get; private set; }
         public bool Dead { get; set; }
         SpriteFont _font;
-        public Score(SpriteFont font)
+        Vector2 _offset;
+        public Score(SpriteFont font, Vector2 location)
         {
+            _offset = location;
             CurrentScore = 0;
             Dead = false;
             _font = font;
@@ -93,7 +95,7 @@ namespace Tetris
         public void Draw(SpriteBatch sb)
         {
             sb.DrawString(_font, string.Format("Score: {0}", CurrentScore.ToString()), 
-                new Vector2(50, 400), Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
+                new Vector2(50, 400) + _offset, Color.White, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0);
         }
     }
 }

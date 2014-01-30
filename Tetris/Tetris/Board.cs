@@ -30,23 +30,27 @@ namespace Tetris
         Texture2D _ghostTexture;
         int _timer;
         IAudioManager _audio;
-
+        Vector2 _offset;
+        PlayerIndex _index;
         /// <summary>
         /// Initializes the board and it's component.
         /// </summary>
         /// <param name="sb"></param>
         /// <param name="font"></param>
         /// <param name="text"></param>
-        public Board(SpriteBatch sb, SpriteFont font, Texture2D text, Texture2D ghost, Game game, InputState input)
+        public Board(SpriteBatch sb, SpriteFont font, Texture2D text, Texture2D ghost, Game game, 
+            InputState input, Vector2 location, PlayerIndex pIndex)
         {
+            _index = pIndex;
+            _offset = location;
             _input = input;
             _texture = text;
             _font = font;
             _ghostTexture = ghost;
-            _holder = new Holder(_font);
-            _score = new Score(_font);
-            _level = new Level(_font);
-            _preview = new Preview(_font, _buffer);
+            _holder = new Holder(_font, _offset);
+            _score = new Score(_font, _offset);
+            _level = new Level(_font, _offset);
+            _preview = new Preview(_font, _buffer, _offset);
             _spriteBatch = sb;
             Grid = new Block[22, 10];
             NewTetromino();
@@ -346,13 +350,13 @@ namespace Tetris
                 {
                     Block b = (Block)Grid.GetValue(i, j);
                     if (b != null)
-                        b.Draw(_spriteBatch, _texture, 50 + j * 16, 16 * i);
+                        b.Draw(_spriteBatch, _texture, (int)_offset.X + j * 16, (int)_offset.Y + 16 * i);
                     else
-                        Draw("0", 50 + j * 16, 16 * i, Color.White);
+                        Draw("0", (int)_offset.X + j * 16, (int)_offset.Y +16 * i, Color.White);
 
                     foreach (Block block in _ghost._tetromino.Blocks)
                         if (block.Position.X == j && block.Position.Y == i)
-                            block.Draw(_spriteBatch, _texture, 50 + j * 16, 16 * i);
+                            block.Draw(_spriteBatch, _texture, (int)_offset.X + j * 16, (int)_offset.Y + 16 * i);
                 }
         }
 
@@ -374,40 +378,46 @@ namespace Tetris
             if (!_das.TimerStopped)
                 _das.IncrementTimer(gameTime.ElapsedGameTime.Milliseconds);
 
-            _input.Update(); // Update input
-            PlayerIndex useless;
-
             if (_input.IsKeyUp(_das.key))
                 _das.StopDASTimer();
 
             if (_das.DASEnabled)
                 _das.IncrementDelayTimer(gameTime.ElapsedGameTime.Milliseconds, MoveTetromino, _score.HandleSoftDropEvent);
 
-            if (_input.IsNewKeyPress(Keys.Right, null, out useless))
+            PlayerIndex useless;
+            Keys key;
+            key = (_index == PlayerIndex.One ? Keys.Right : Keys.D);
+                
+            if (_input.IsNewKeyPress(key, _index, out useless))
             {
                 MoveTetromino(Directions.Right);
-                _das.StartDASTimer(Directions.Right, Keys.Right);
+                _das.StartDASTimer(Directions.Right, key);
             }
-       
-            if (_input.IsNewKeyPress(Keys.Down, null, out useless))
+
+            key = (_index == PlayerIndex.One ? Keys.Down : Keys.S);
+            if (_input.IsNewKeyPress(key, _index, out useless))
             {
                 MoveTetromino(Directions.Bottom);
-                _das.StartDASTimer(Directions.Bottom, Keys.Down);
+                _das.StartDASTimer(Directions.Bottom, key);
             }
 
-            if (_input.IsNewKeyPress(Keys.Left, null, out useless))
+            key = (_index == PlayerIndex.One ? Keys.Left : Keys.A);
+            if (_input.IsNewKeyPress(key, _index, out useless))
             {
                 MoveTetromino(Directions.Left);
-                _das.StartDASTimer(Directions.Left, Keys.Left);
+                _das.StartDASTimer(Directions.Left, key);
             }
 
-            if (_input.IsNewKeyPress(Keys.Space, null, out useless))
+            key = (_index == PlayerIndex.One ? Keys.Space : Keys.R);
+            if (_input.IsNewKeyPress(key, _index, out useless))
                 RotateTetromino();
 
-            if (_input.IsNewKeyPress(Keys.LeftShift, null, out useless))
+            key = (_index == PlayerIndex.One ? Keys.LeftShift : Keys.H);
+            if (_input.IsNewKeyPress(key, _index, out useless))
                 HoldTetromino();
 
-            if (_input.IsNewKeyPress(Keys.F, null, out useless))
+            key = (_index == PlayerIndex.One ? Keys.Enter : Keys.T);
+            if (_input.IsNewKeyPress(key, _index, out useless))
                 HardMoveTetromino();
         }
 
