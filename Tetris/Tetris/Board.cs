@@ -32,6 +32,7 @@ namespace Tetris
         IAudioManager _audio;
         Vector2 _offset;
         PlayerIndex _index;
+        ControlsConfig _controls;
         /// <summary>
         /// Initializes the board and it's component.
         /// </summary>
@@ -39,8 +40,9 @@ namespace Tetris
         /// <param name="font"></param>
         /// <param name="text"></param>
         public Board(SpriteBatch sb, SpriteFont font, Texture2D text, Texture2D ghost, Game game, 
-            InputState input, Vector2 location, PlayerIndex pIndex)
+            InputState input, Vector2 location, PlayerIndex pIndex, ControlsConfig controls)
         {
+            _controls = controls;
             _index = pIndex;
             _offset = location;
             _input = input;
@@ -385,39 +387,32 @@ namespace Tetris
                 _das.IncrementDelayTimer(gameTime.ElapsedGameTime.Milliseconds, MoveTetromino, _score.HandleSoftDropEvent);
 
             PlayerIndex useless;
-            Keys key;
-            key = (_index == PlayerIndex.One ? Keys.Right : Keys.D);
-                
-            if (_input.IsNewKeyPress(key, _index, out useless))
+   
+            if (_input.IsNewKeyPress(_controls.Right, _index, out useless))
             {
                 MoveTetromino(Directions.Right);
-                _das.StartDASTimer(Directions.Right, key);
+                _das.StartDASTimer(Directions.Right, _controls.Right);
             }
 
-            key = (_index == PlayerIndex.One ? Keys.Down : Keys.S);
-            if (_input.IsNewKeyPress(key, _index, out useless))
+            if (_input.IsNewKeyPress(_controls.Bottom, _index, out useless))
             {
                 MoveTetromino(Directions.Bottom);
-                _das.StartDASTimer(Directions.Bottom, key);
+                _das.StartDASTimer(Directions.Bottom, _controls.Bottom);
             }
 
-            key = (_index == PlayerIndex.One ? Keys.Left : Keys.A);
-            if (_input.IsNewKeyPress(key, _index, out useless))
+            if (_input.IsNewKeyPress(_controls.Left, _index, out useless))
             {
                 MoveTetromino(Directions.Left);
-                _das.StartDASTimer(Directions.Left, key);
+                _das.StartDASTimer(Directions.Left, _controls.Left);
             }
 
-            key = (_index == PlayerIndex.One ? Keys.Space : Keys.R);
-            if (_input.IsNewKeyPress(key, _index, out useless))
+            if (_input.IsNewKeyPress(_controls.Rotate, _index, out useless))
                 RotateTetromino();
 
-            key = (_index == PlayerIndex.One ? Keys.LeftShift : Keys.H);
-            if (_input.IsNewKeyPress(key, _index, out useless))
+            if (_input.IsNewKeyPress(_controls.Hold, _index, out useless))
                 HoldTetromino();
 
-            key = (_index == PlayerIndex.One ? Keys.Enter : Keys.T);
-            if (_input.IsNewKeyPress(key, _index, out useless))
+            if (_input.IsNewKeyPress(_controls.Drop, _index, out useless))
                 HardMoveTetromino();
         }
 

@@ -18,6 +18,7 @@ namespace Tetris
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager _graphics;
+        StateManager _stateManager;
         AudioManager _audio; 
         SpriteBatch _spriteBatch;
         GameState _state;
@@ -52,10 +53,13 @@ namespace Tetris
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            SpriteFont font = Content.Load<SpriteFont>("gamefont");
-            Texture2D texture = Content.Load<Texture2D>("block");
-            Texture2D ghost = Content.Load<Texture2D>("ghost");
-            _state = new LocalMultiplayer(_spriteBatch, font, texture, ghost, this);
+            // SpriteFont font = Content.Load<SpriteFont>("gamefont");
+            //Texture2D texture = Content.Load<Texture2D>("block");
+            //Texture2D ghost = Content.Load<Texture2D>("ghost");
+            _stateManager = new StateManager(this, _spriteBatch);
+            //_state = new SinglePlayer(_spriteBatch, font, texture, ghost, this);
+            _state = new MainMenu(_stateManager);
+            _stateManager.AddState(_state);
             _audio.LoadSound("complete");
             _audio.LoadSound("button1");
         }
@@ -80,7 +84,7 @@ namespace Tetris
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            _state.Update(gameTime);
+            _stateManager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -92,7 +96,7 @@ namespace Tetris
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _state.Draw();
+            _stateManager.Draw();
             base.Draw(gameTime);
         }
     }
