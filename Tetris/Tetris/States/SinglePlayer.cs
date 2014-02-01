@@ -17,8 +17,8 @@ namespace Tetris.States
         public SinglePlayer(SpriteBatch spriteBatch, StateManager manager)
             : base(manager)
         {
-            _spriteBatch = spriteBatch;
             LoadContent();
+            _spriteBatch = spriteBatch;
             _board = new Board(spriteBatch, _font, _texture, _ghost, Manager.Game, InputState, new Vector2(50, 0), PlayerIndex.One, InitControls());
         }
 

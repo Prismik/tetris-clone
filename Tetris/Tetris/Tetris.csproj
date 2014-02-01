@@ -111,6 +111,8 @@
     <Compile Include="ControlsConfig.cs" />
     <Compile Include="DelayedAutoShift.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Menu\Menu.cs" />
+    <Compile Include="Menu\MenuNode.cs" />
     <Compile Include="Score.cs" />
     <Compile Include="States\LocalMultiplayer.cs" />
     <Compile Include="Util\AudioManager.cs" />
