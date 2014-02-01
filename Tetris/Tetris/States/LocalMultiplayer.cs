@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace Tetris.States
@@ -10,16 +6,26 @@ namespace Tetris.States
     class LocalMultiplayer: GameState
     {
         Board _firstBoard, _secondBoard;
-        SpriteBatch _spriteBatch;
-        public LocalMultiplayer(SpriteBatch spriteBatch, SpriteFont font, Texture2D texture, Texture2D ghost, Game game, StateManager manager)
+    
+        SpriteFont _font;
+        Texture2D _texture;
+        Texture2D _ghost;
+        public LocalMultiplayer(StateManager manager)
             :base(manager)
         {
-            _spriteBatch = spriteBatch;
-
+            LoadContent();
             ControlsConfig left = InitLeftControl();
             ControlsConfig right = InitRightControl();
-            _firstBoard = new Board(spriteBatch, font, texture, ghost, game, InputState, new Vector2(50, 0), PlayerIndex.One, left);
-            _secondBoard = new Board(spriteBatch, font, texture, ghost, game, InputState, new Vector2(550, 0),PlayerIndex.Two, right);
+            _firstBoard = new Board(Manager.SpriteBatch, _font, _texture, _ghost, Manager.Game, InputState, new Vector2(50, 0), PlayerIndex.One, left);
+            _secondBoard = new Board(Manager.SpriteBatch, _font, _texture, _ghost, Manager.Game, InputState, new Vector2(550, 0), PlayerIndex.Two, right);
+        }
+
+        public override void LoadContent()
+        {
+            base.LoadContent();
+            _font = Manager.Game.Content.Load<SpriteFont>("gamefont");
+            _texture = Manager.Game.Content.Load<Texture2D>("block");
+            _ghost = Manager.Game.Content.Load<Texture2D>("ghost");
         }
 
         private ControlsConfig InitLeftControl()

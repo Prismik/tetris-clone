@@ -10,16 +10,14 @@ namespace Tetris.States
     class SinglePlayer: GameState
     {
         Board _board;
-        SpriteBatch _spriteBatch;
         SpriteFont _font;
         Texture2D _texture;
         Texture2D _ghost;
-        public SinglePlayer(SpriteBatch spriteBatch, StateManager manager)
+        public SinglePlayer(StateManager manager)
             : base(manager)
         {
             LoadContent();
-            _spriteBatch = spriteBatch;
-            _board = new Board(spriteBatch, _font, _texture, _ghost, Manager.Game, InputState, new Vector2(50, 0), PlayerIndex.One, InitControls());
+            _board = new Board(Manager.SpriteBatch, _font, _texture, _ghost, Manager.Game, InputState, new Vector2(50, 0), PlayerIndex.One, InitControls());
         }
 
         private ControlsConfig InitControls()
