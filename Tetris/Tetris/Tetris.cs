@@ -15,14 +15,14 @@ namespace Tetris
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class Tetris : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager _graphics;
         StateManager _stateManager;
         AudioManager _audio; 
         SpriteBatch _spriteBatch;
         GameState _state;
-        public Game1()
+        public Tetris()
         {
             Content.RootDirectory = "Content";
             _graphics = new GraphicsDeviceManager(this);

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetris", "Tetris\Tetris\Tetris.csproj", "{2F39F06B-6963-422B-9ADF-D44598A8ABF8}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "TetrisContent", "Tetris\TetrisContent\TetrisContent.contentproj", "{6465C912-0F23-44AB-A7C2-E21ABD3415A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TetrisContent", "Tetris\TetrisContent\TetrisContent.contentproj", "{6465C912-0F23-44AB-A7C2-E21ABD3415A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Network", "Network\Network.csproj", "{A0EFC576-19AA-453A-8B01-F188FB6F4767}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{2F39F06B-6963-422B-9ADF-D44598A8ABF8}.Release|x86.Build.0 = Release|x86
 		{6465C912-0F23-44AB-A7C2-E21ABD3415A4}.Debug|x86.ActiveCfg = Debug|x86
 		{6465C912-0F23-44AB-A7C2-E21ABD3415A4}.Release|x86.ActiveCfg = Release|x86
+		{A0EFC576-19AA-453A-8B01-F188FB6F4767}.Debug|x86.ActiveCfg = Debug|x86
+		{A0EFC576-19AA-453A-8B01-F188FB6F4767}.Debug|x86.Build.0 = Debug|x86
+		{A0EFC576-19AA-453A-8B01-F188FB6F4767}.Release|x86.ActiveCfg = Release|x86
+		{A0EFC576-19AA-453A-8B01-F188FB6F4767}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -87,14 +87,10 @@ namespace JNetwork
                                    DataStruct msg = new DataStruct();
                                    msg.action     = "position";
                                    msg.name       = c2.Key;
-                                   msg.x          = c2.Value.x;
-                                   msg.y          = c2.Value.y;
                                    sendStruct(msg, c.Key);
 
                                    // Update aim.
                                    msg.action = "aim";
-                                   msg.x = c2.Value.aim_x;
-                                   msg.y = c2.Value.aim_y;
                                    sendStruct(msg, c.Key);
                                }
                            }
@@ -138,9 +134,9 @@ namespace JNetwork
             byte[] data = MarshalHelper.MarshalHelper.SerializeMessage<DataStruct>(msg);
             if (_connected.ContainsKey(name))
             {
-                if (_connected[name].ipendpoint != null)
+                if (_connected[name]._ipEndPoint != null)
                 {
-                    _udp.Send(data, data.Length, _connected[name].ipendpoint);
+                    _udp.Send(data, data.Length, _connected[name]._ipEndPoint);
                 }
             }
             else
@@ -171,7 +167,7 @@ namespace JNetwork
                 if (!_connected.ContainsKey(name))
                 {
                     // Add to connections
-                    _connected.Add(name, new ConnectedClient(name, ipep, _rand.Next(0,500), _rand.Next(0,500) ));
+                    _connected.Add(name, new ConnectedClient(name, ipep));
                     #region console it
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write(" Accepted");

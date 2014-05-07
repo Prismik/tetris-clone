@@ -9,13 +9,15 @@ namespace Tetris.Menus
     {
         Keys _actionKey;
         public string ID { get; private set; }
-        public Action Action { get; set; }
-        public MenuNode Top { get; set; }
-        public MenuNode Right { get; set; }
-        public MenuNode Bottom { get; set; }
-        public MenuNode Left { get; set; }
+        public Action Action    { get; set; }
+        public MenuNode Top     { get; set; }
+        public MenuNode Right   { get; set; }
+        public MenuNode Bottom  { get; set; }
+        public MenuNode Left    { get; set; }
+
         bool _active;
         public bool Active { get { return _active; } set { OnToggleActive(value); _active = value; } }
+
         public Vector2 Position { get; private set; }
         public MenuNode(string id, Action action, Vector2 position)
         {

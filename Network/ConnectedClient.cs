@@ -1,23 +1,16 @@
 ﻿using System.Net;
-using Tvector;
 
 namespace JNetwork
 {
     public class ConnectedClient
     {
-        public string       name;
-        public IPEndPoint   ipendpoint;
-        public float        x;
-        public float        y;
-        public float        aim_x;
-        public float        aim_y;
+        public string       _name;
+        public IPEndPoint   _ipEndPoint;
 
-        public ConnectedClient(string n, IPEndPoint ipep, int X, int Y)
+        public ConnectedClient(string n, IPEndPoint ipep)
         {
-            name        = n;
-            ipendpoint  = ipep;
-            x           = X;    // sets to random when created from server..
-            y           = Y;
+            _name        = n;
+            _ipEndPoint  = ipep;
         }
     }
 }
