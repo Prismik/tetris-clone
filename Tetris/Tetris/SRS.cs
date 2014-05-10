@@ -37,6 +37,31 @@ namespace Tetris
             _TLSTZoffsets[3].Add(new Vector2(-1, -1));
             _TLSTZoffsets[3].Add(new Vector2(0, 2));
             _TLSTZoffsets[3].Add(new Vector2(-1, 2));
+
+            /* 0	( 0, 0)	(-1, 0)	(+2, 0)	(-1, 0)	(+2, 0)
+             * R	(-1, 0)	( 0, 0)	( 0, 0)	( 0,+1)	( 0,-2)
+             * 2	(-1,+1)	(+1,+1)	(-2,+1)	(+1, 0)	(-2, 0)
+             * L	( 0,+1)	( 0,+1)	( 0,+1)	( 0,-1)	( 0,+2)*/
+            // Origin
+            _Ioffsets[0].Add(new Vector2(0, 0));
+            _Ioffsets[0].Add(new Vector2(-1, 0));
+            _Ioffsets[0].Add(new Vector2(2, 0));
+            _Ioffsets[0].Add(new Vector2(-1, 0));
+            _Ioffsets[0].Add(new Vector2(2, 0));
+
+            // Right
+            _Ioffsets[1].Add(new Vector2(-1, 0));
+            _Ioffsets[1].Add(new Vector2(0, 0));
+            _Ioffsets[1].Add(new Vector2(0, 0));
+            _Ioffsets[1].Add(new Vector2(0, 1));
+            _Ioffsets[1].Add(new Vector2(0, -2));
+
+
+            _Ioffsets[2].Add(new Vector2(0, 0));
+            _Ioffsets[2].Add(new Vector2(-1, 0));
+            _Ioffsets[2].Add(new Vector2(2, 0));
+            _Ioffsets[2].Add(new Vector2(-1, 0));
+            _Ioffsets[2].Add(new Vector2(2, 0));  
         }
 
         public void Wallkick(Tetromino t)

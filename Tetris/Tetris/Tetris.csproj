@@ -115,6 +115,7 @@
     <Compile Include="Menus\Menu.cs" />
     <Compile Include="Menus\MenuNode.cs" />
     <Compile Include="Score.cs" />
+    <Compile Include="SRS.cs" />
     <Compile Include="States\LocalMultiplayer.cs" />
     <Compile Include="Util\AudioManager.cs" />
     <Compile Include="Util\Directions.cs" />

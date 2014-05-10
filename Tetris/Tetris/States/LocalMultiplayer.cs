@@ -36,7 +36,7 @@ namespace Tetris.States
             config.Right = Microsoft.Xna.Framework.Input.Keys.Right;
             config.Rotate = Microsoft.Xna.Framework.Input.Keys.Space;
             config.Hold = Microsoft.Xna.Framework.Input.Keys.LeftShift;
-            config.Drop = Microsoft.Xna.Framework.Input.Keys.D;
+            config.Drop = Microsoft.Xna.Framework.Input.Keys.Z;
 
             return config;
         }
@@ -44,12 +44,12 @@ namespace Tetris.States
         private ControlsConfig InitRightControl()
         {
             ControlsConfig config = new ControlsConfig();
-            config.Left = Microsoft.Xna.Framework.Input.Keys.Left;
-            config.Bottom = Microsoft.Xna.Framework.Input.Keys.Down;
-            config.Right = Microsoft.Xna.Framework.Input.Keys.Right;
-            config.Rotate = Microsoft.Xna.Framework.Input.Keys.Space;
-            config.Hold = Microsoft.Xna.Framework.Input.Keys.LeftShift;
-            config.Drop = Microsoft.Xna.Framework.Input.Keys.D;
+            config.Left = Microsoft.Xna.Framework.Input.Keys.A;
+            config.Bottom = Microsoft.Xna.Framework.Input.Keys.S;
+            config.Right = Microsoft.Xna.Framework.Input.Keys.D;
+            config.Rotate = Microsoft.Xna.Framework.Input.Keys.F;
+            config.Hold = Microsoft.Xna.Framework.Input.Keys.G;
+            config.Drop = Microsoft.Xna.Framework.Input.Keys.H;
 
             return config;
         }
