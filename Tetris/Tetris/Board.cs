@@ -16,6 +16,7 @@ namespace Tetris
         int totalLines;
         public Block[,] Grid { get; set; }
         DelayedAutoShift _das = new DelayedAutoShift();
+        SRS _srs = new SRS();
         TetrominoBuffer _buffer = new TetrominoBuffer();
         InputState _input;
         Score _score;
@@ -205,23 +206,69 @@ namespace Tetris
             // Validate if tetromino can be rotated
             Tetromino copy = new Tetromino(_tetromino);
             copy.Rotate();
+            List<Vector2> wallKicks = _srs.WallkickValues(copy);
+            int requiredKick = -1;
             foreach (Block p in copy.Blocks)
             {
                 if (PointOutsideBoardX(p.Position))
-                    return false;
+                {
+                    int i = 0;
+                    foreach (Vector2 kick in wallKicks)
+                    {
+                        if (!PointOutsideBoardX(p.Position + kick))
+                        {
+                            requiredKick = i;
+                            break;
+                        }
+
+                        i++;
+                    }
+
+                    if (requiredKick == -1)
+                        return false;
+                }
 
                 if (PointOutsideBoardY(p.Position))
+                {
                     //LockTetromino();
-                    return false;
+                    for (int i = requiredKick == -1 ? 0 : requiredKick; i != wallKicks.Count - 1; i++)
+                    {
+                        if (!PointOutsideBoardY(p.Position + wallKicks[i]))
+                        {
+                            requiredKick = i;
+                            break;
+                        }
+                        i++;
+                    }
+
+                    if (requiredKick == -1)
+                        return false;
+                }
 
                 if (!_tetromino.PointInsideTetromino(p.Position) &&
                     PointAlreadyOccupied(p.Position))
+                {
                     //LockTetromino();
-                    return false;
-            }
+                    for (int i = requiredKick == -1 ? 0 : requiredKick; i != wallKicks.Count - 1; i++)
+                    {
+                        if (!_tetromino.PointInsideTetromino(p.Position + wallKicks[i]) &&
+                            PointAlreadyOccupied(p.Position + wallKicks[i]))
+                        {
+                            requiredKick = i;
+                            break;
+                        }
+                        i++;
+                    }
 
+                    if (requiredKick == -1)
+                        return false;
+                }
+            }
+            
             WipeTetromino(_tetromino);  // Old position
             _tetromino.Rotate(); // Rotate
+            if (requiredKick != -1)
+                _tetromino.Translate(wallKicks[requiredKick]);
             ReplaceTetromino(_tetromino); // New position
 
             CreateGhostPiece();
@@ -338,6 +385,9 @@ namespace Tetris
         /// <returns></returns>
         private bool PointAlreadyOccupied(Vector2 p)
         {
+            if (PointOutsideBoardX(p) || PointOutsideBoardY(p))
+                return false;
+
             return Grid[(int)p.Y, (int)p.X] != null;
         }
 

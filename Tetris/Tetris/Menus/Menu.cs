@@ -7,12 +7,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Tetris.Menus
 {
-    public class Menu
+    public abstract class Menu
     {
         SpriteFont _font;
         SpriteBatch _spriteBatch;
         InputState _input;
         List<MenuNode> _nodes = new List<MenuNode>();
+        bool _init = false;
+        bool _leaving = false;
+
         public MenuNode CurrentNode { get; private set; }
         public Menu(List<MenuNode> linkedNodes, SpriteFont font, SpriteBatch sb, InputState input)
         {
@@ -24,27 +27,68 @@ namespace Tetris.Menus
             CurrentNode.Active = true;
         }
 
-        private void ChangeActive(MenuNode newNode)
+        /// <summary>
+        /// Changes the active menu node.
+        /// </summary>
+        /// <param name="newNode">The new node to be active.</param>
+        protected virtual void ChangeActive(MenuNode newNode)
         {
             CurrentNode.Active = false;
             newNode.Active = true;
             CurrentNode = newNode;
         }
 
-        public virtual void Update(GameTime gameTime)
+        protected virtual void EnterContext(MenuNode node)
         {
-            foreach (MenuNode node in _nodes)
-                node.Update(gameTime);
-
-            PlayerIndex useless;
-            if (_input.IsMenuSelect(null, out useless))
-                CurrentNode.Action();
-            else if (_input.IsMenuDown(null))
-                ChangeActive(CurrentNode.Bottom);
-            else if (_input.IsMenuUp(null))
-                ChangeActive(CurrentNode.Top);
+            _init = true;
+            node.EnterContext(pass, 1);
         }
 
+        protected virtual void LeaveContext(MenuNode node, int pos)
+        {
+            node.LeaveContext(pass, pos);
+            pass += 0.1f;
+        }
+
+        protected abstract bool LeaveContextDone(MenuNode node);
+        protected abstract bool EnterContextDone(MenuNode node);
+
+        float pass = 0.3f;
+        public virtual void Update(GameTime gameTime)
+        {
+            int i = 0;
+            bool doneLeave = false;
+            foreach (MenuNode node in _nodes)
+            {
+                node.Update(gameTime);
+
+                if (!_init)
+                {
+                    EnterContext(node);
+                    EnterContextDone(node);
+                }
+
+                if (_leaving)
+                {
+                    LeaveContext(node, i++);
+                    doneLeave = LeaveContextDone(node);
+                }
+            }
+
+            if (doneLeave)
+                CurrentNode.Action();
+
+            PlayerIndex useless;
+            if (_init && !_leaving)
+            {
+                if (_input.IsMenuSelect(null, out useless))
+                    _leaving = true;
+                else if (_input.IsMenuDown(null))
+                    ChangeActive(CurrentNode.Bottom);
+                else if (_input.IsMenuUp(null))
+                    ChangeActive(CurrentNode.Top);
+            }
+        }
         public virtual void Draw()
         {
             foreach (MenuNode node in _nodes)

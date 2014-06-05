@@ -111,11 +111,13 @@
     <Compile Include="ControlsConfig.cs" />
     <Compile Include="DelayedAutoShift.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Menus\ColoredMenu.cs" />
     <Compile Include="Menus\ColoredMenuNode.cs" />
     <Compile Include="Menus\Menu.cs" />
     <Compile Include="Menus\MenuNode.cs" />
     <Compile Include="Score.cs" />
     <Compile Include="SRS.cs" />
+    <Compile Include="States\GameRoom.cs" />
     <Compile Include="States\LocalMultiplayer.cs" />
     <Compile Include="Util\AudioManager.cs" />
     <Compile Include="Util\Directions.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Holder.cs" />
     <Compile Include="InputState.cs" />
     <Compile Include="Util\IAudioManager.cs" />
+    <Compile Include="Util\MathUtils.cs" />
     <Compile Include="Util\Permutation.cs" />
     <Compile Include="Preview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,12 +140,17 @@
     <Compile Include="States\StateManager.cs" />
     <Compile Include="Util\TetrominoBuffer.cs" />
     <Compile Include="Entities\TetrominoFactory.cs" />
+    <Compile Include="Util\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Network\Network.csproj">
+      <Project>{A0EFC576-19AA-453A-8B01-F188FB6F4767}</Project>
+      <Name>Network</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TetrisContent\TetrisContent.contentproj">
       <Name>TetrisContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>

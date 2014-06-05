@@ -7,17 +7,22 @@ using Microsoft.Xna.Framework;
 namespace Tetris
 {
     /// <summary>
-    /// Handles wallkick for tetrominoes.
+    /// Handles the calculation of wallkicks for tetromino rotations.
     /// </summary>
     class SRS
     {
         List<Vector2>[] _TLSTZoffsets = new List<Vector2>[4];
         List<Vector2>[] _Ioffsets = new List<Vector2>[4];
-        List<Vector2>[] _Ooffsets = new List<Vector2>[4];
         public SRS()
         {
-            // Origin
+            ////////////////////
+            // TLSTZ Tetrominoes
+            // Init
             for (int i = 0; i != 4; i++)
+                _TLSTZoffsets[i] = new List<Vector2>();
+
+            // Origin
+            for (int i = 0; i != 5; i++)
                 _TLSTZoffsets[0].Add(new Vector2(0, 0));
 
             // Right
@@ -27,9 +32,9 @@ namespace Tetris
             _TLSTZoffsets[1].Add(new Vector2(0, 2));
             _TLSTZoffsets[1].Add(new Vector2(1, 2));
 
-            // Counter Clockwise
-            for (int i = 0; i != 4; i++)
-                _TLSTZoffsets[2].Add(new Vector2(0, 0)); 
+            // Counter Clockwise 
+            for (int i = 0; i != 5; i++)
+                _TLSTZoffsets[2].Add(new Vector2(0, 0));
 
             // Left
             _TLSTZoffsets[3].Add(new Vector2(0, 0));
@@ -37,11 +42,13 @@ namespace Tetris
             _TLSTZoffsets[3].Add(new Vector2(-1, -1));
             _TLSTZoffsets[3].Add(new Vector2(0, 2));
             _TLSTZoffsets[3].Add(new Vector2(-1, 2));
+            
+            ////////////////
+            // I Tetromino
+            // Init
+            for (int i = 0; i != 4; i++)
+                _Ioffsets[i] = new List<Vector2>();
 
-            /* 0	( 0, 0)	(-1, 0)	(+2, 0)	(-1, 0)	(+2, 0)
-             * R	(-1, 0)	( 0, 0)	( 0, 0)	( 0,+1)	( 0,-2)
-             * 2	(-1,+1)	(+1,+1)	(-2,+1)	(+1, 0)	(-2, 0)
-             * L	( 0,+1)	( 0,+1)	( 0,+1)	( 0,-1)	( 0,+2)*/
             // Origin
             _Ioffsets[0].Add(new Vector2(0, 0));
             _Ioffsets[0].Add(new Vector2(-1, 0));
@@ -57,15 +64,22 @@ namespace Tetris
             _Ioffsets[1].Add(new Vector2(0, -2));
 
 
-            _Ioffsets[2].Add(new Vector2(0, 0));
-            _Ioffsets[2].Add(new Vector2(-1, 0));
-            _Ioffsets[2].Add(new Vector2(2, 0));
-            _Ioffsets[2].Add(new Vector2(-1, 0));
-            _Ioffsets[2].Add(new Vector2(2, 0));  
+            _Ioffsets[2].Add(new Vector2(-1, 1));
+            _Ioffsets[2].Add(new Vector2(1, 1));
+            _Ioffsets[2].Add(new Vector2(-2, 1));
+            _Ioffsets[2].Add(new Vector2(1, 0));
+            _Ioffsets[2].Add(new Vector2(-2, 0));
+
+            _Ioffsets[3].Add(new Vector2(0, 1));
+            _Ioffsets[3].Add(new Vector2(0, 1));
+            _Ioffsets[3].Add(new Vector2(0, 1));
+            _Ioffsets[3].Add(new Vector2(0, -1));
+            _Ioffsets[3].Add(new Vector2(0, 2));
         }
 
-        public void Wallkick(Tetromino t)
+        public List<Vector2> WallkickValues(Tetromino t)
         {
+            List<Vector2> wallkicks = new List<Vector2>();
             switch (t.Type)
             {
                 case TetrominoTypes.J:
@@ -73,17 +87,30 @@ namespace Tetris
                 case TetrominoTypes.S:
                 case TetrominoTypes.T:
                 case TetrominoTypes.Z:
-                    
+                    wallkicks = GetWallKick(_TLSTZoffsets, t);
                     break;
                 case TetrominoTypes.I:
-
-                    break;
-                case TetrominoTypes.O:
-                    
+                    wallkicks = GetWallKick(_Ioffsets, t);
                     break;
                 default:
                     break;
             }
+
+            return wallkicks;
+        }
+
+        private List<Vector2> GetWallKick(List<Vector2>[] offsets, Tetromino t)
+        {
+            List<Vector2> wallkicks = new List<Vector2>();
+            for (int i = 0; i != offsets[0].Count; i++)
+            {
+                int x = (int)(offsets[(int)t.GetLastRotation()][i].X - offsets[(int)t.CurrentRotation][i].X);
+                int y = (int)(offsets[(int)t.GetLastRotation()][i].Y - offsets[(int)t.CurrentRotation][i].Y);
+                wallkicks.Add(new Vector2(x, y));
+            }
+
+            RotationTypes ty = t.GetLastRotation();
+            return wallkicks;
         }
     }
 }

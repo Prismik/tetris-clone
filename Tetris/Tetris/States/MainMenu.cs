@@ -26,22 +26,40 @@ namespace Tetris.States
             {
                 Manager.AddState(new SinglePlayer(Manager));
                 Manager.RemoveState(this);
-            }, new Vector2(50, 50));
+            }, new Vector2(250, 50), _font);
 
             MenuNode multiPlayerNode = new ColoredMenuNode("Multi", "Local Multi Player", delegate
             {
                 Manager.AddState(new LocalMultiplayer(Manager));
                 Manager.RemoveState(this);
-            }, new Vector2(50, 150));
+            }, new Vector2(250, 150), _font);
+
+            MenuNode udpNode = new ColoredMenuNode("UDP", "UDP Server Test", delegate
+            {
+                Manager.AddState(new GameRoom(Manager));
+                Manager.RemoveState(this);
+            }, new Vector2(250, 250), _font);
+
+            MenuNode t4 = new ColoredMenuNode("Multi", "Local Multi Player", delegate
+            {
+                Manager.AddState(new LocalMultiplayer(Manager));
+                Manager.RemoveState(this);
+            }, new Vector2(250, 350), _font);
 
             singlePlayerNode.Bottom = multiPlayerNode;
-            singlePlayerNode.Top = multiPlayerNode;
+            singlePlayerNode.Top = t4;
 
-            multiPlayerNode.Bottom = singlePlayerNode;
+            multiPlayerNode.Bottom = udpNode;
             multiPlayerNode.Top = singlePlayerNode;
 
-            nodes.AddRange(new MenuNode[] {singlePlayerNode, multiPlayerNode});
-            _menu = new Menu(nodes, _font, Manager.SpriteBatch, InputState);
+            udpNode.Bottom = t4;
+            udpNode.Top = multiPlayerNode;
+
+            t4.Bottom = singlePlayerNode;
+            t4.Top = udpNode;
+
+            nodes.AddRange(new MenuNode[] {singlePlayerNode, multiPlayerNode, udpNode, t4});
+            _menu = new ColoredMenu(nodes, _font, Manager.SpriteBatch, InputState);
         }
 
         public override void LoadContent()

@@ -3,33 +3,78 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Tetris.Util;
 
 namespace Tetris.Menus
 {
     class ColoredMenuNode : MenuNode
     {
         string _text;
-        Color _color;
-        public ColoredMenuNode(string id, string text, Action action, Vector2 position)
+        SpriteFont _font; 
+        
+        public Color Color { get; set; }
+        public ColoredMenuNode(string id, string text, Action action, Vector2 position, SpriteFont font)
             :base(id, action, position)
         {
             _text = text;
-            _color = Color.White;
+            Color = Color.White;
+            _font = font;
+            Visible = true;
         }
 
         internal override void OnToggleActive(bool value)
         {
-            _color = (value == true ? Color.Red : Color.White);
+            Color = (value == true ? Color.Red : Color.White);
+        }
+
+        public override Vector2 GetSize()
+        {
+            return Vector2.Multiply(_font.MeasureString(_text), Scale);
+        }
+
+        public override void LeaveContext(float val, int pos)
+        {
+            float x = Position.X;
+            MathUtils.StepExponential(ref x, 0f - GetSize().X, 0.000001f, 1f);
+            Position -= new Vector2(Math.Max(Math.Abs(val) - pos, 0), 0);
+            //Math.Max(x, 0), Position.Y);
+                //
+        }
+
+
+        public override void EnterContext(float val, int pos)
+        {
+            Position += new Vector2(Math.Abs(val), 0);
+        }
+
+        public override bool EnterContextDone()
+        {
+            return true;
+        }
+
+        public override bool LeaveContextDone()
+        {
+            return false;
         }
 
         public override void Update(GameTime gameTime)
         {
-           
+            if (Active)
+            {
+                float a = (float)Math.Sin(gameTime.TotalGameTime.TotalSeconds * 5) / 2 + 0.5f;
+                float r = Color.R;
+                float g = Color.G;
+                float b = Color.B;
+
+                Color = new Color(a, g, b, a);
+            }
         }
 
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, Microsoft.Xna.Framework.Graphics.SpriteFont font)
+        public override void Draw(SpriteBatch sb, SpriteFont font)
         {
-            sb.DrawString(font, _text, Position, _color);
+            if (Visible)
+                sb.DrawString(font, _text, Position, Color, 0, Vector2.One, Scale, SpriteEffects.None, 0);
         }
     }
 }

@@ -21,9 +21,10 @@ namespace JNetwork
         bool        _connected;
         public string _name;
         public Dictionary<string, SimulatedClient> _simulatedClients;
-
+        public string LastReceived { get; set; }
         public Client(string n)
         {
+            LastReceived = "";
             _simulatedClients = new Dictionary<string, SimulatedClient>();
             _name             = n;
             _ipEndPoint       = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 80);
@@ -57,6 +58,9 @@ namespace JNetwork
                 {
                     switch (ds.action)
                     {
+                        case "reply":
+                            LastReceived = ds.name;
+                            break;
                         case "position":
                             if (_simulatedClients.ContainsKey(ds.name))
                             {

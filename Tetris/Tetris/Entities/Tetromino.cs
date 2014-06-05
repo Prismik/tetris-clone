@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Tetris.Entities.Tetromino
 {
     public enum TetrominoTypes { I, O, T, J, L, S, Z }
+    public enum RotationTypes { ORIGIN, RIGHT, COUNTERCLOCK, LEFT }
 
     /// <summary>
     /// Represents a tetromino piece that can be controlled by the player. A tetromino is used
@@ -15,14 +16,17 @@ namespace Tetris.Entities.Tetromino
     {
         public TetrominoTypes Type { get; protected internal set; }
         public Block[] Blocks { get; protected internal set; }
+        public RotationTypes CurrentRotation { get; protected internal set; }
         private Color _color;
         private Tetromino()
         {
+            CurrentRotation = RotationTypes.ORIGIN;
             Blocks = new Block[4];
         }
 
         public Tetromino(TetrominoTypes t)
         {
+            CurrentRotation = RotationTypes.ORIGIN;
             Blocks = new Block[4];
             Type = t;
             switch (Type)
@@ -41,6 +45,7 @@ namespace Tetris.Entities.Tetromino
 
         public Tetromino(Tetromino tetromino)
         {
+            CurrentRotation = tetromino.CurrentRotation;
             Blocks = new Block[4];
             for (int i = 0; i != Blocks.Length; i++)
                 Blocks[i] = new Block(tetromino.Blocks[i]);
@@ -59,11 +64,23 @@ namespace Tetris.Entities.Tetromino
                 Blocks[i].Translate(p);
         }
 
+        public RotationTypes GetLastRotation()
+        {
+            return (int)CurrentRotation == 0 ? RotationTypes.LEFT : CurrentRotation - 1;
+        }
+
+        public RotationTypes GetNextRotation()
+        {
+           return (int)CurrentRotation == 3 ? RotationTypes.ORIGIN : CurrentRotation + 1;
+        }
+
         /// <summary>
-        /// Rotates the tetromino around an axis. This axis is presently the 2nd block of the tetromino.
+        /// Rotates the tetromino around an axis. This axis is the 2nd block of the tetromino.
         /// </summary>
         public void Rotate()
         {
+            // Handle left and right rotation TODO
+            CurrentRotation = GetNextRotation();
             if (Type.Equals(TetrominoTypes.O))
                 return;
             
